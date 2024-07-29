@@ -6,6 +6,8 @@ import colors from "colors";
 import morgan from "morgan";
 import mongoose from "mongoose";
 
+import authRouter from "./routes/authRouter.js";
+
 const app = express();
 config({ path: "./config/config.env" });
 
@@ -13,7 +15,7 @@ config({ path: "./config/config.env" });
 mongoose
   .connect(process.env.MONGOOSE_URI)
   .then(() => {
-    console.log("MongoDB connected successfully".bgGreen);
+    console.log("MongoDB connected successfully".bgMagenta);
   })
   .catch((error) => {
     console.error("Error connecting to MongoDB:".bgRed, error);
@@ -35,6 +37,14 @@ app.use((err, req, res, next) => {
     statusCode,
     message,
   });
+});
+
+//routes
+app.use("/api/v1/user", authRouter);
+
+//test route
+app.get("/", (req, res) => {
+  res.json("Welcome kuttay");
 });
 
 export default app;
